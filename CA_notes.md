@@ -4,3 +4,5 @@ Conway's Game of Life is a 2d visualization of how generations of 'organizims' w
 
 Cellular Automata(CA) programs are used in research setings to model ecological, epidemiological and chemical simulations as well as CA-based computer processors. 
 
+In software engineering, Turing Complete describes a computational system that has equivilent processing power as a Turing Machine. 
+

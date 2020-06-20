@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
+import Grid from "./components/Grid"
 
 
 function App() {
   return (
     <div className="App">
-        <text>Ari's Game of Life</text>
+        <text>Conway's Game of Life</text>
+        <Grid/>
     </div>
   );
 }

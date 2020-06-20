@@ -24,27 +24,32 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Conway's Game of Life</title>
+    <title>Game of Life</title>
     <script type="application/javascript">
-    function draw() {
-      var canvas = document.getElementById('canvas');
-      if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
+    // let canvas = document.getElementById('canvas');
+    // let ctx = canvas.getContext('2d');
 
-        ctx.fillStyle = 'rgb(200, 0, 0)';
-        ctx.fillRect(10, 10, 50, 50);
+    // const resolution = 40;
+    // canvas.width = 400;
+    // canvas.height = 400;
 
-        ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-        ctx.fillRect(30, 30, 50, 50);
-      }
-    }
+    // function buildGrid() {
+
+    //     ctx.fillStyle = 'rgb(200, 0, 0)';
+    //     ctx.fillRect(10, 10, 50, 50);
+
+    //     ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+    //     ctx.fillRect(30, 30, 50, 50);
+      
+    // }
   </script>
   </head>
-  <body onload="draw()">
+  <!-- <body onload="buildGrid()"> -->
+  <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     
     <div id="root"></div>
-    <canvas id="canvas" width="697" height="457" style="background-color: aquamarine;--width-mod:4px; --cursor:auto;"></canvas>
+    <canvas id="canvas"></canvas>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
