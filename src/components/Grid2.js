@@ -46,15 +46,12 @@ const Grid2 = () => {
 
   //   const nextRef = createRef(gen1);
   //   nextRef.current = gen1;
-  //   console.log(nextRef);
+  //   console.log(`gen1 => nextRef', ${nextRef.current}`);
   //   useEffect(() => {
-  //     if (!nextRef.current) {
+  //     if (nextRef.current != gen1) {
   //       nextRef.current = gen1;
   //     }
-  //     return () => {
-  //       //   cleanup;
-  //     };
-  //   }, [input]);
+  //   }, [gen1, setGen1]);
 
   const [running, setRunning] = useState(false);
   const runRef = useRef(running);
@@ -62,8 +59,7 @@ const Grid2 = () => {
 
   // For Testing -- to delete =======================
   const BufferGrid = msg => {
-    // console.log(`In BufferGrid gen1 => ${gen1}\n**from ${msg}`);
-    return gen0.map((rows, i) =>
+    return gen1.map((rows, i) =>
       rows.map((col, j) => (
         <div
           style={{
@@ -73,18 +69,6 @@ const Grid2 = () => {
             border: 'solid 1px black'
           }}
           key={`${i}-${j}`}
-          //   onClick={() => {
-          //     if (running) {
-          //       console.log('**cant click**');
-          //       return;
-          //     } else {
-          //       const temp = gen1;
-          //       temp[i][j] = temp[i][j] === 1 ? 0 : 1;
-          //       setGen1(temp);
-          //       console.log(`(${i},${j})==> ${gen1[i][j]}\n`, gen1 == temp);
-          //       return fillGrid('fillGrid onClick');
-          //     }
-          //   }}
         />
       ))
     );
@@ -107,9 +91,13 @@ const Grid2 = () => {
     return fillGrid('random');
   };
 
+  const clone = items =>
+    items.map(item => (Array.isArray(item) ? clone(item) : item));
+
   // fillGrid will always display gen0, gen1 hidden in background
   const fillGrid = useCallback(msg => {
     // console.log(`In fillGrid gen0 => ${gen0}\n**from ${msg}`);
+
     return gen0.map((rows, i) =>
       rows.map((col, j) => (
         <div
@@ -126,9 +114,11 @@ const Grid2 = () => {
               return;
             } else {
               gen0[i][j] = gen0[i][j] === 1 ? 0 : 1;
-              setGen0(gen0);
-              console.log(`(${i},${j})==> ${gen0[i][j]}\n`, gen0);
-              //   console.log(`(${i},${j})==> ${gen0[i][j]}\n`, gen0);
+              //   console.log(`(${i},${j})==> ${gen0[i][j]}\n${gen0}`);
+
+              const gridCopy = clone(gen0);
+              setGen0(gridCopy);
+              //   console.log(`(${i},${j})==> ${gridCopy[i][j]}\n`, gridCopy);
               return fillGrid('fillGrid onClick');
             }
           }}
@@ -163,16 +153,16 @@ const Grid2 = () => {
     return sum;
   };
 
-  const runSim = useCallback(() => {
-    let sum = 0;
-
+  const runCycle = useCallback(() => {
     for (let i = 0; i < numRows; i++) {
       for (let j = 0; j < numCols; j++) {
         let neighbors = countLiveNeighbors(i, j);
-        if (gen0[i][j] === 1 && neighbors === 3) {
-          gen1[i][j] = 0;
-        } else if (gen0[i][j] === 0 && (neighbors === 2 || neighbors === 3)) {
+        console.log();
+        if (gen0[i][j] === 0 && neighbors === 3) {
           gen1[i][j] = 1;
+        }
+        if (gen0[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
+          gen1[i][j] = 0;
         } else {
           gen1[i][j] = gen0[i][j];
         }
@@ -180,18 +170,30 @@ const Grid2 = () => {
     }
 
     genCount += 1;
-    setGen0(gen1);
 
+    const gridCopy = clone(gen1);
+    setGen0(gridCopy);
+
+    while (runRef.current == true) {
+      setTimeout(runCycle, 200);
+    }
+
+    return fillGrid('runCycle');
+  }, [countLiveNeighbors, fillGrid, gen0, gen1]);
+
+  const runSim = useCallback(() => {
     // console.log(
-    //   `run Sim after  gen0 => ${gen0}\ngen1 => ${gen1}\n gen0=gen1? ${gen0 ==
-    //     gen1}`
+    //   `in runSim \n nextRef.current != gen0 -> ${nextRef.current !=
+    //     gen0}\n runRef.current == true -> ${runRef.current == true}`
     // );
-
-    //   setTimeout(runSim, 200);
-    fillGrid('runSim');
-    BufferGrid('');
-    return (genCount += 1), setGen0(gen1), setGen1();
-  }, [countLiveNeighbors, fillGrid, gen0, gen1, buildGrid]);
+    while (true) {
+      if (runRef.current == true) {
+        //   if (nextRef.current != gen0 || runRef.current == true) {
+        setTimeout(runCycle, 200);
+        //   return runCycle();
+      }
+    }
+  });
 
   const aliveCount = () => {
     // var sum = (r, a) => {
@@ -222,7 +224,7 @@ const Grid2 = () => {
       <div className='controls'>
         <button
           onClick={() => {
-            runSim();
+            runCycle();
           }}
         >
           Next
