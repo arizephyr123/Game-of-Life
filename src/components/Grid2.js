@@ -40,12 +40,12 @@ const Grid2 = () => {
     return buildGrid(empty);
   });
 
-  const bufferBlankRef = useRef(gen1);
-  bufferBlankRef.current = gen1;
+  //   const bufferBlankRef = useRef(gen1);
+  //   bufferBlankRef.current = gen1;
   //   console.log(bufferBlankRef);
 
-  const nextRef = createRef(gen1);
-  nextRef.current = gen1;
+  //   const nextRef = createRef(gen1);
+  //   nextRef.current = gen1;
   //   console.log(nextRef);
   //   useEffect(() => {
   //     if (!nextRef.current) {
