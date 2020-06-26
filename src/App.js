@@ -6,7 +6,7 @@ import Grid2 from './components/Grid2';
 function App() {
   return (
     <div className='App'>
-      <text>Conway's Game of Life</text>
+      <h1>Conway's Game of Life</h1>
       {/* <Grid /> */}
       <Grid2 />
     </div>
