@@ -6,8 +6,19 @@ import React, {
   createRef
 } from 'react';
 
-const numRows = 7;
-const numCols = 7;
+const numRows = 25;
+const numCols = 25;
+
+const operations = [
+  [0, 1],
+  [0, -1],
+  [1, -1],
+  [-1, 1],
+  [1, 1],
+  [-1, -1],
+  [1, 0],
+  [-1, 0]
+];
 
 let genCount = 0;
 const empty = 'empty';
@@ -34,6 +45,11 @@ const Grid2 = () => {
   const [gen0, setGen0] = useState(() => {
     return buildGrid(empty);
   });
+  const beforeRefUse = useRef(gen0);
+  beforeRefUse.current = gen0;
+
+  const beforeRefCreate = useRef(gen0);
+  beforeRefCreate.current = gen0;
 
   //gen1, buffer in background
   const [gen1, setGen1] = useState(() => {
@@ -58,7 +74,9 @@ const Grid2 = () => {
   runRef.current = running;
 
   // For Testing -- to delete =======================
-  const BufferGrid = msg => {
+
+  const BufferGrid = useCallback(msg => {
+    console.log(`In BufferGrid gen1 => ${gen1}`);
     return gen1.map((rows, i) =>
       rows.map((col, j) => (
         <div
@@ -72,7 +90,7 @@ const Grid2 = () => {
         />
       ))
     );
-  };
+  });
 
   // ========================
 
@@ -80,15 +98,18 @@ const Grid2 = () => {
     setGen0(() => {
       return buildGrid(empty);
     });
+    setGen1(() => {
+      return buildGrid(empty);
+    });
     genCount = 0;
-    return fillGrid('clear');
+    return fillGrid('clear'), BufferGrid('');
   };
 
   const randomGrid = () => {
     setGen0(() => {
       return buildGrid(random);
     });
-    return fillGrid('random');
+    return fillGrid('random'), BufferGrid('');
   };
 
   const clone = items =>
@@ -109,6 +130,7 @@ const Grid2 = () => {
           }}
           key={`${i}-${j}`}
           onClick={() => {
+            console.log(`(${i},${j})==> ${gen0[i][j]}`);
             if (running) {
               console.log('**cant click**');
               return;
@@ -119,7 +141,7 @@ const Grid2 = () => {
               const gridCopy = clone(gen0);
               setGen0(gridCopy);
               //   console.log(`(${i},${j})==> ${gridCopy[i][j]}\n`, gridCopy);
-              return fillGrid('fillGrid onClick');
+              return fillGrid('fillGrid onClick'), BufferGrid('');
             }
           }}
         />
@@ -127,59 +149,104 @@ const Grid2 = () => {
     );
   });
 
-  useEffect(() => {
-    fillGrid('useEffect');
-  }, [gen0, fillGrid]);
+  //   const countLiveNeighbors = (ri, ci) => {
+  //     console.log(`countLiveNeighbors`);
+  //     let sum = 0;
 
-  const countLiveNeighbors = (ri, ci) => {
-    console.log(`in  neighborCount - gen0(${ri},${ci})=> ${gen0[ri][ci]}`);
-    let sum = 0;
-    // for row of index -1 to 1
-    for (let i = -1; i < 2; i++) {
-      for (let j = -1; j < 2; j++) {
-        let row = (i + ri + numRows) % numRows;
-        let col = (j + ci + numCols) % numCols;
-        // console.log(
-        //   `sum + gen0[col][row] = (sum + gen0[col][row]})\n${sum} + ${
-        //     gen0[col][row]
-        //   } = ${sum + gen0[col][row]}`
-        // );
-        sum += gen0[col][row];
-      }
-    }
-    // subtract out self which was counted at (0, 0)
-    sum -= gen0[ri][ci];
-    // console.log(`neighborCount: ${sum}\n (${ri}, ${ci}) => ${gen0[ri][ci]}`);
-    return sum;
-  };
+  //     // for row of index -1 to 1
+  //     for (let i = -1; i < 2; i++) {
+  //       for (let j = -1; j < 2; j++) {
+  //         let row = (i + ri + numRows) % numRows;
+  //         let col = (j + ci + numCols) % numCols;
+  //         // console.log(
+  //         //   `alives + gen0(${col},${row})val = new sum alives\n${sum} + ${
+  //         //     gen0[col][row]
+  //         //   } = ${sum + gen0[col][row]}`
+  //         // );
+  //         sum += gen0[col][row];
+  //       }
+  //     }
 
-  const runCycle = useCallback(() => {
+  //     // subtract out self which was counted at (0, 0)
+  //     sum -= gen0[ri][ci];
+  //     // console.log(`neighborCount: ${sum}\n (${ri}, ${ci}) => ${gen0[ri][ci]}`);
+  //     // console.log(
+  //     //   `in  neighborCount - gen0(${ri},${ci})=> ${gen0[ri][ci]}\nsum -> ${sum}`
+  //     // );
+  //     return sum;
+  //   };
+
+  const runCycle = () => {
+    console.log(
+      `runCycle start\n    gen0 => ${gen0}\nbeforeRefUse => ${beforeRefUse.current}\nbeforeRefCreate => ${beforeRefCreate.current}`
+    );
+    let copyGen0 = clone(gen0);
+    console.log(`runCycle 2\ncopyGen0 => ${copyGen0}`);
+
     for (let i = 0; i < numRows; i++) {
       for (let j = 0; j < numCols; j++) {
-        let neighbors = countLiveNeighbors(i, j);
-        console.log();
+        let neighbors = 0;
+        operations.forEach(([x, y]) => {
+          const neighborI = (i + x + numRows) % numRows;
+          const neighborJ = (j + y + numCols) % numCols;
+          console.log(
+            `i + x + numRows\n (${i} + ${x} + ${numRows}\ngen0(${neighborI},${neighborJ}) has ${neighbors} live neigbors`
+          );
+          neighbors += gen0[neighborI][neighborJ];
+        });
+        // If an organisim is dead and has exactly 3 neigbors, then it comes back to life in the next generation. Else it stays dead
         if (gen0[i][j] === 0 && neighbors === 3) {
-          gen1[i][j] = 1;
+          console.log(
+            `in runCycle rules 1\n gen0${i}${j} === 0 ? => ${gen0[i][j]}\n neighbors === 3 ? => ${neighbors}`
+          );
+          copyGen0[i][j] = 1;
         }
-        if (gen0[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
-          gen1[i][j] = 0;
-        } else {
-          gen1[i][j] = gen0[i][j];
+        // If an organisim is alive and has 2 or 3 neighbors, then it remains alive in the next generation. Else it dies.
+        else if (gen0[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
+          console.log(
+            `in runCycle rules 2\n gen0${i}${j} === 1 ? => ${gen0[i][j]}\n neighbors = 2 or 3 ? => ${neighbors}`
+          );
+          copyGen0[i][j] = 0;
         }
       }
     }
 
+    // copyGen0.map((rows, i) => {
+    //   console.log(`runCycle 3`);
+    //   rows.map((col, j) => {
+    //     // let neighbors = countLiveNeighbors(i, j);
+
+    //     // If an organisim is dead and has exactly 3 neigbors, then it comes back to life in the next generation. Else it stays dead
+    //     if (gen0[i][j] === 0 && neighbors === 3) {
+    //       console.log(
+    //         `in runCycle rules 1\n gen0${i}${j} === 0 ? => ${gen0[i][j]}\n neighbors === 3 ? => ${neighbors}`
+    //       );
+    //       copyGen0[i][j] = 1;
+    //     }
+    //     // If an organisim is alive and has 2 or 3 neighbors, then it remains alive in the next generation. Else it dies.
+    //     else if (gen0[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
+    //       console.log(
+    //         `in runCycle rules 2\n gen0${i}${j} === 1 ? => ${gen0[i][j]}\n neighbors = 2 or 3 ? => ${neighbors}`
+    //       );
+    //       copyGen0[i][j] = 0;
+    //     }
+    //   });
+    //   console.log(
+    //     `runCycle 4 rules done\n New gen1 => ${copyGen0}\n     gen0 => ${gen0}\nbeforeRefUse => ${beforeRefUse.current}\nbeforeRefCreate => ${beforeRefCreate.current}\ngen0 =>`
+    //   );
+    // });
+
+    setGen1(copyGen0);
+    console.log(`runCycle 5 - ${copyGen0 == gen1 ? 'pass' : 'fail'}`);
+    setGen0(() => clone(gen1));
+    console.log(`runCycle 6- ${gen0 == gen1 ? 'pass' : 'fail'}`);
     genCount += 1;
+    console.log(
+      `runCycle 7 - genCount & done\nbeforeRefUse => ${beforeRefUse.current}\nbeforeRefCreate => ${beforeRefCreate.current}`
+    );
 
-    const gridCopy = clone(gen1);
-    setGen0(gridCopy);
-
-    while (runRef.current == true) {
-      setTimeout(runCycle, 200);
-    }
-
-    return fillGrid('runCycle');
-  }, [countLiveNeighbors, fillGrid, gen0, gen1]);
+    return fillGrid('runCycle'), BufferGrid('');
+  };
 
   const runSim = useCallback(() => {
     // console.log(
@@ -217,18 +284,17 @@ const Grid2 = () => {
     return `TBD... Alive: ???  Dead: ${numCols * numRows} - ???`;
   };
 
+  useEffect(() => {
+    fillGrid('useEffect');
+    BufferGrid('');
+  }, [gen0, gen1, fillGrid, BufferGrid, runCycle]);
+
   return (
     <>
       <div>{`Generation: ${genCount}`}</div>
       {aliveCount()}
       <div className='controls'>
-        <button
-          onClick={() => {
-            runCycle();
-          }}
-        >
-          Next
-        </button>
+        <button onClick={runCycle}>Next</button>
         <button
           onClick={() => {
             setRunning(!running);

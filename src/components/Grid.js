@@ -78,4 +78,28 @@ const Grid = () => {
   );
 };
 
+const countLiveNeighbors = (ri, ci) => {
+  let sum = 0;
+  // for row of index -1 to 1
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      let row = (i + ri + numRows) % numRows;
+      let col = (j + ci + numCols) % numCols;
+      // console.log(
+      //   `alives + gen0(${col},${row})val = new sum alives\n${sum} + ${
+      //     gen0[col][row]
+      //   } = ${sum + gen0[col][row]}`
+      // );
+      sum += gen0[col][row];
+    }
+  }
+  // subtract out self which was counted at (0, 0)
+  sum -= gen0[ri][ci];
+  // console.log(`neighborCount: ${sum}\n (${ri}, ${ci}) => ${gen0[ri][ci]}`);
+  // console.log(
+  //   `in  neighborCount - gen0(${ri},${ci})=> ${gen0[ri][ci]}\nsum -> ${sum}`
+  // );
+  return sum;
+};
+
 export default Grid;
