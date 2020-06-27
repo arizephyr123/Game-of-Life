@@ -192,25 +192,13 @@ const Grid2 = () => {
   };
 
   const aliveCount = () => {
-    // var sum = (r, a) => {
-    //   console.log(`${r}`);
-    //   r.map((b, i) => a[i] + b);
-    // };
-    // const sum = (rows, i) => rows.map((col, j) => rows[i] + col[j]);
-    // let alive = gen0.reduce(function(rows, col) {
-    //   return rows.map(function(value, index) {
-    //     return value + col[index];
-    //   });
-    // });
-    // const alive = gen0.reduce(sum(gen0.rows, gen0.));
-    // console.log(`alive -> ${alive}`);
-    // let sum = 0;
-    // let alive = gen0.map((rows, i) =>
-    //   // console.log(row.map((val, i) => sum += val));
-    //   console.log(`alive--> sum: ${sum}, rows:${rows}, i: ${i}`)
-    // );
-    // console.log(alive.rows);
-    return `TBD... Alive: ???  Dead: ${numCols * numRows} - ???`;
+    let sum = 0;
+    for (let i = 0; i < numRows; i++) {
+      for (let j = 0; j < numCols; j++) {
+        sum += gen0[i][j];
+      }
+    }
+    return `Alive: ${sum}  Dead: ${numCols * numRows - sum}`;
   };
 
   useEffect(() => {
@@ -237,7 +225,7 @@ const Grid2 = () => {
         </button>
         <button
           onClick={randomGrid}
-          style={{ display: running ? 'none' : 'inline' }}
+          style={{ display: runRef.current ? 'none' : 'inline' }}
         >
           Random
         </button>
