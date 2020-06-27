@@ -1,13 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  createRef
-} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-const numRows = 25;
-const numCols = 25;
+const numRows = 5;
+const numCols = 5;
 
 const operations = [
   [0, 1],
@@ -25,7 +19,6 @@ const empty = 'empty';
 const random = 'random';
 
 const buildGrid = type => {
-  //   console.log(`building ${type} grid...`);
   const rows = [];
   for (let i = 0; i < numRows; i++) {
     if (type === empty) {
@@ -45,29 +38,11 @@ const Grid2 = () => {
   const [gen0, setGen0] = useState(() => {
     return buildGrid(empty);
   });
-  const beforeRefUse = useRef(gen0);
-  beforeRefUse.current = gen0;
-
-  const beforeRefCreate = useRef(gen0);
-  beforeRefCreate.current = gen0;
 
   //gen1, buffer in background
   const [gen1, setGen1] = useState(() => {
     return buildGrid(empty);
   });
-
-  //   const bufferBlankRef = useRef(gen1);
-  //   bufferBlankRef.current = gen1;
-  //   console.log(bufferBlankRef);
-
-  //   const nextRef = createRef(gen1);
-  //   nextRef.current = gen1;
-  //   console.log(`gen1 => nextRef', ${nextRef.current}`);
-  //   useEffect(() => {
-  //     if (nextRef.current != gen1) {
-  //       nextRef.current = gen1;
-  //     }
-  //   }, [gen1, setGen1]);
 
   const [running, setRunning] = useState(false);
   const runRef = useRef(running);
@@ -109,6 +84,7 @@ const Grid2 = () => {
     setGen0(() => {
       return buildGrid(random);
     });
+    genCount = 0;
     return fillGrid('random'), BufferGrid('');
   };
 
@@ -177,11 +153,7 @@ const Grid2 = () => {
   //   };
 
   const runCycle = () => {
-    console.log(
-      `runCycle start\n    gen0 => ${gen0}\nbeforeRefUse => ${beforeRefUse.current}\nbeforeRefCreate => ${beforeRefCreate.current}`
-    );
-    let copyGen0 = clone(gen0);
-    console.log(`runCycle 2\ncopyGen0 => ${copyGen0}`);
+    console.log(`runCycle start\ngen0 => ${gen0}\ngen1 => ${gen1}`);
 
     for (let i = 0; i < numRows; i++) {
       for (let j = 0; j < numCols; j++) {
@@ -189,78 +161,35 @@ const Grid2 = () => {
         operations.forEach(([x, y]) => {
           const neighborI = (i + x + numRows) % numRows;
           const neighborJ = (j + y + numCols) % numCols;
-          console.log(
-            `i + x + numRows\n (${i} + ${x} + ${numRows}\ngen0(${neighborI},${neighborJ}) has ${neighbors} live neigbors`
-          );
+
           neighbors += gen0[neighborI][neighborJ];
         });
         // If an organisim is dead and has exactly 3 neigbors, then it comes back to life in the next generation. Else it stays dead
         if (gen0[i][j] === 0 && neighbors === 3) {
-          console.log(
-            `in runCycle rules 1\n gen0${i}${j} === 0 ? => ${gen0[i][j]}\n neighbors === 3 ? => ${neighbors}`
-          );
-          copyGen0[i][j] = 1;
+          gen1[i][j] = 1;
         }
         // If an organisim is alive and has 2 or 3 neighbors, then it remains alive in the next generation. Else it dies.
         else if (gen0[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
-          console.log(
-            `in runCycle rules 2\n gen0${i}${j} === 1 ? => ${gen0[i][j]}\n neighbors = 2 or 3 ? => ${neighbors}`
-          );
-          copyGen0[i][j] = 0;
+          gen1[i][j] = 0;
+        } else {
+          gen1[i][j] = gen0[i][j];
         }
       }
     }
 
-    // copyGen0.map((rows, i) => {
-    //   console.log(`runCycle 3`);
-    //   rows.map((col, j) => {
-    //     // let neighbors = countLiveNeighbors(i, j);
-
-    //     // If an organisim is dead and has exactly 3 neigbors, then it comes back to life in the next generation. Else it stays dead
-    //     if (gen0[i][j] === 0 && neighbors === 3) {
-    //       console.log(
-    //         `in runCycle rules 1\n gen0${i}${j} === 0 ? => ${gen0[i][j]}\n neighbors === 3 ? => ${neighbors}`
-    //       );
-    //       copyGen0[i][j] = 1;
-    //     }
-    //     // If an organisim is alive and has 2 or 3 neighbors, then it remains alive in the next generation. Else it dies.
-    //     else if (gen0[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
-    //       console.log(
-    //         `in runCycle rules 2\n gen0${i}${j} === 1 ? => ${gen0[i][j]}\n neighbors = 2 or 3 ? => ${neighbors}`
-    //       );
-    //       copyGen0[i][j] = 0;
-    //     }
-    //   });
-    //   console.log(
-    //     `runCycle 4 rules done\n New gen1 => ${copyGen0}\n     gen0 => ${gen0}\nbeforeRefUse => ${beforeRefUse.current}\nbeforeRefCreate => ${beforeRefCreate.current}\ngen0 =>`
-    //   );
-    // });
-
-    setGen1(copyGen0);
-    console.log(`runCycle 5 - ${copyGen0 == gen1 ? 'pass' : 'fail'}`);
-    setGen0(() => clone(gen1));
+    setGen1(() => clone(gen1));
+    // console.log(
+    //   `runCycle 5 - ${
+    //     copyGen0 == gen1 ? 'pass' : 'fail'
+    //   }\n copyGen0 ${copyGen0}\n gen1 ${gen1}`
+    // );
+    setGen0(gen1);
     console.log(`runCycle 6- ${gen0 == gen1 ? 'pass' : 'fail'}`);
     genCount += 1;
-    console.log(
-      `runCycle 7 - genCount & done\nbeforeRefUse => ${beforeRefUse.current}\nbeforeRefCreate => ${beforeRefCreate.current}`
-    );
+    console.log(`runCycle 7 - genCount & done\n`);
 
     return fillGrid('runCycle'), BufferGrid('');
   };
-
-  const runSim = useCallback(() => {
-    // console.log(
-    //   `in runSim \n nextRef.current != gen0 -> ${nextRef.current !=
-    //     gen0}\n runRef.current == true -> ${runRef.current == true}`
-    // );
-    while (true) {
-      if (runRef.current == true) {
-        //   if (nextRef.current != gen0 || runRef.current == true) {
-        setTimeout(runCycle, 200);
-        //   return runCycle();
-      }
-    }
-  });
 
   const aliveCount = () => {
     // var sum = (r, a) => {
@@ -300,7 +229,7 @@ const Grid2 = () => {
             setRunning(!running);
             if (!running) {
               runRef.current = true;
-              runSim();
+              //   runSim();
             }
           }}
         >
@@ -326,7 +255,7 @@ const Grid2 = () => {
         }}
       >
         {fillGrid('render')}
-        {BufferGrid('render')}
+        {/* {BufferGrid('render')} */}
       </div>
     </>
   );
