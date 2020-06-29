@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  createRef
+} from 'react';
 
 const numRows = 5;
 const numCols = 5;
@@ -47,11 +53,12 @@ const Grid2 = () => {
   const [running, setRunning] = useState(false);
   const runRef = useRef(running);
   runRef.current = running;
+  //   const runRefC = createRef(running);
+  //   runRefC.current = running;
 
   // For Testing -- to delete =======================
 
   const BufferGrid = useCallback(msg => {
-    console.log(`In BufferGrid gen1 => ${gen1}`);
     return gen1.map((rows, i) =>
       rows.map((col, j) => (
         <div
@@ -93,8 +100,6 @@ const Grid2 = () => {
 
   // fillGrid will always display gen0, gen1 hidden in background
   const fillGrid = useCallback(msg => {
-    // console.log(`In fillGrid gen0 => ${gen0}\n**from ${msg}`);
-
     return gen0.map((rows, i) =>
       rows.map((col, j) => (
         <div
@@ -106,17 +111,16 @@ const Grid2 = () => {
           }}
           key={`${i}-${j}`}
           onClick={() => {
-            console.log(`(${i},${j})==> ${gen0[i][j]}`);
+            // console.log(`(${i},${j})==> ${gen0[i][j]}`);
             if (running) {
+              // if (!runRef) {
               console.log('**cant click**');
               return;
             } else {
               gen0[i][j] = gen0[i][j] === 1 ? 0 : 1;
-              //   console.log(`(${i},${j})==> ${gen0[i][j]}\n${gen0}`);
 
               const gridCopy = clone(gen0);
               setGen0(gridCopy);
-              //   console.log(`(${i},${j})==> ${gridCopy[i][j]}\n`, gridCopy);
               return fillGrid('fillGrid onClick'), BufferGrid('');
             }
           }}
@@ -125,36 +129,7 @@ const Grid2 = () => {
     );
   });
 
-  //   const countLiveNeighbors = (ri, ci) => {
-  //     console.log(`countLiveNeighbors`);
-  //     let sum = 0;
-
-  //     // for row of index -1 to 1
-  //     for (let i = -1; i < 2; i++) {
-  //       for (let j = -1; j < 2; j++) {
-  //         let row = (i + ri + numRows) % numRows;
-  //         let col = (j + ci + numCols) % numCols;
-  //         // console.log(
-  //         //   `alives + gen0(${col},${row})val = new sum alives\n${sum} + ${
-  //         //     gen0[col][row]
-  //         //   } = ${sum + gen0[col][row]}`
-  //         // );
-  //         sum += gen0[col][row];
-  //       }
-  //     }
-
-  //     // subtract out self which was counted at (0, 0)
-  //     sum -= gen0[ri][ci];
-  //     // console.log(`neighborCount: ${sum}\n (${ri}, ${ci}) => ${gen0[ri][ci]}`);
-  //     // console.log(
-  //     //   `in  neighborCount - gen0(${ri},${ci})=> ${gen0[ri][ci]}\nsum -> ${sum}`
-  //     // );
-  //     return sum;
-  //   };
-
   const runCycle = () => {
-    console.log(`runCycle start\ngen0 => ${gen0}\ngen1 => ${gen1}`);
-
     for (let i = 0; i < numRows; i++) {
       for (let j = 0; j < numCols; j++) {
         let neighbors = 0;
@@ -178,15 +153,8 @@ const Grid2 = () => {
     }
 
     setGen1(() => clone(gen1));
-    // console.log(
-    //   `runCycle 5 - ${
-    //     copyGen0 == gen1 ? 'pass' : 'fail'
-    //   }\n copyGen0 ${copyGen0}\n gen1 ${gen1}`
-    // );
     setGen0(gen1);
-    console.log(`runCycle 6- ${gen0 == gen1 ? 'pass' : 'fail'}`);
     genCount += 1;
-    console.log(`runCycle 7 - genCount & done\n`);
 
     return fillGrid('runCycle'), BufferGrid('');
   };
@@ -201,10 +169,50 @@ const Grid2 = () => {
     return `Alive: ${sum}  Dead: ${numCols * numRows - sum}`;
   };
 
+  const runSim = () => {
+    console.log(`after = running ${running}, runRef.current ${runRef.current}`);
+    if (running === true) {
+      console.log('in while running');
+      console.log(`running ${running}, runRef.current ${runRef.current}`);
+      setTimeout(runCycle, 600);
+    } else {
+      console.log(
+        `out of running=> running ${running}, runRef.current ${runRef.current}`
+      );
+    }
+    //
+    return;
+  };
+
+  //   const runSim = useCallback(ms => {
+  //     console.log(
+  //       `before state= running ${running}, runRef.current ${runRef.current}`
+  //     );
+  //     setRunning(!running);
+  //     console.log(`after = running ${running}, runRef.current ${runRef.current}`);
+  //     if (!running) {
+  //       console.log(`A = running ${running}, runRef.current ${runRef.current}`);
+  //       return;
+  //     } else {
+  //       if (!ms) {
+  //         ms = 600;
+  //       }
+  //       console.log(`running ${running}, runRef.current ${runRef.current}`);
+  //       // console.log(
+  //       //   `running ${running}\nrunRef ${runRef.current}\nrunRefCreate ${runRefC.current}`
+  //       // );}
+
+  //       setTimeout(runCycle, ms);
+  //     }
+  //   });
+
+  //   useEffect(() => {
+  //     runSim();
+  //   }, [running]);
+
   useEffect(() => {
     fillGrid('useEffect');
-    BufferGrid('');
-  }, [gen0, gen1, fillGrid, BufferGrid, runCycle]);
+  }, [gen0, fillGrid]);
 
   return (
     <>
@@ -213,19 +221,20 @@ const Grid2 = () => {
       <div className='controls'>
         <button onClick={runCycle}>Next</button>
         <button
+          //   onClick={runSim}
           onClick={() => {
             setRunning(!running);
-            if (!running) {
-              runRef.current = true;
-              //   runSim();
+            if (running === true) {
+              runSim();
             }
           }}
         >
-          {!running ? 'Start' : 'Stop'}
+          {/* {!running ? 'Start' : 'Stop'} */}
+          {!running ? `${running}` : `${running}`}
         </button>
         <button
           onClick={randomGrid}
-          style={{ display: runRef.current ? 'none' : 'inline' }}
+          style={{ display: running ? 'none' : 'inline' }}
         >
           Random
         </button>
