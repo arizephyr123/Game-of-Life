@@ -1,14 +1,12 @@
 import React from 'react';
 import './App.css';
-// import Grid from './components/Grid';
-import Grid2 from './components/Grid2';
+import Grid from './components/Grid';
 
 function App() {
   return (
     <div className='App'>
       <h1>Conway's Game of Life</h1>
-      {/* <Grid /> */}
-      <Grid2 />
+      <Grid />
     </div>
   );
 }
