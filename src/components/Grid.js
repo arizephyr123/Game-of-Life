@@ -1,5 +1,7 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, createRef, useCallback } from 'react';
 import produce from 'immer';
+import Rules from './Rules';
+import About from './About';
 
 const numCols = 50;
 const numRows = 50;
@@ -34,7 +36,6 @@ const starterArray = type => {
     }
   }
   genCount = 0;
-  //   console.log(cols);
   return cols;
 };
 
@@ -46,9 +47,28 @@ const Grid = () => {
   const [gen0, setGen0] = useState(() => starterArray(empty));
 
   const [running, setRunning] = useState(false);
-
   const runningRef = useRef(running);
   runningRef.current = running;
+
+  const [speed, setSpeed] = useState(400);
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
+
+  const faster = curr_speed => {
+    if (curr_speed <= 1000) {
+      setSpeed(curr_speed + 100);
+    } else {
+      return;
+    }
+  };
+
+  const slower = curr_speed => {
+    if (curr_speed != 100) {
+      setSpeed(curr_speed - 100);
+    } else {
+      return;
+    }
+  };
 
   const aliveCount = () => {
     let count = 0;
@@ -60,10 +80,8 @@ const Grid = () => {
     return `Alive: ${count}  Dead: ${numCols * numRows - count}`;
   };
 
-  const runCycle = useCallback(() => {
-    if (!runningRef.current) {
-      return;
-    }
+  //    run Cycle rate is speed for setTimeout
+  const runCycle = useCallback(rate => {
     setGen0(arr => {
       return produce(arr, arrCopy => {
         for (let i = 0; i < numCols; i++) {
@@ -93,8 +111,11 @@ const Grid = () => {
       });
     });
     genCount += 1;
+    if (!runningRef.current) {
+      return;
+    }
     console.log('at Timeout');
-    setTimeout(runCycle, 400);
+    return setTimeout(runCycle, speedRef.current);
   }, []);
 
   return (
@@ -108,12 +129,19 @@ const Grid = () => {
             if (running == false) {
               runningRef.current = true;
               //   runSim();
-              runCycle();
+              runCycle(speedRef.current);
             }
           }}
         >
-          {/* {`running? -> ${running} ==== runningRef -> ${runningRef.current}`} */}
-          {running ? 'Stop' : 'Start'}
+          {`running? -> ${running} ==== runningRef -> ${runningRef.current}`}
+          {/* {running ? 'Stop' : 'Start'} */}
+        </button>
+        <button
+          onClick={() => {
+            runCycle(speedRef.current);
+          }}
+        >
+          Next
         </button>
         <button
           onClick={() => {
@@ -131,7 +159,14 @@ const Grid = () => {
         >
           Clear
         </button>
+        <div>
+          <h5>Speed</h5>
+          <button onClick={() => faster(speed)}>-</button>
+          <button onClick={() => slower(speed)}>+</button>
+        </div>
       </div>
+      <Rules />
+      <About />
       <div
         style={{
           display: 'grid',
