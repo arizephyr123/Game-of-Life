@@ -2,6 +2,8 @@ import React, { useState, useRef, createRef, useCallback } from 'react';
 import produce from 'immer';
 import Rules from './Rules';
 import About from './About';
+import pulsarCoords from '../preset_cell_configs/pulsar';
+import heartsCoords from '../preset_cell_configs/hearts';
 
 const numCols = 50;
 const numRows = 50;
@@ -9,6 +11,7 @@ let genCount = 0;
 const empty = 'empty';
 const random = 'random';
 const pulsar = 'pulsar';
+const hearts = 'hearts';
 
 // list of neighbor positions
 // [x, y] => [col, row]
@@ -23,60 +26,6 @@ const locations = [
   [1, 1]
 ];
 
-const pulsarCoords = [
-  [-4, -6],
-  [-3, -6],
-  [-2, -6],
-  [-1, -4],
-  [-1, -3],
-  [-1, -2],
-  [-4, -1],
-  [-3, -1],
-  [-2, -1],
-  [-6, -4],
-  [-6, -3],
-  [-6, -2],
-
-  [-4, 6],
-  [-3, 6],
-  [-2, 6],
-  [-1, 4],
-  [-1, 3],
-  [-1, 2],
-  [-4, 1],
-  [-3, 1],
-  [-2, 1],
-  [-6, 4],
-  [-6, 3],
-  [-6, 2],
-
-  [4, 6],
-  [3, 6],
-  [2, 6],
-  [1, 4],
-  [1, 3],
-  [1, 2],
-  [4, 1],
-  [3, 1],
-  [2, 1],
-  [6, 4],
-  [6, 3],
-  [6, 2],
-
-  [4, -6],
-  [3, -6],
-  [2, -6],
-  [1, -4],
-  [1, -3],
-  [1, -2],
-  [4, -1],
-  [3, -1],
-  [2, -1],
-  [6, -4],
-  [6, -3],
-  [6, -2]
-];
-
 // creates 2d array to fill grid
 const starterArray = type => {
   let cols = [];
@@ -89,20 +38,43 @@ const starterArray = type => {
         Array.from(Array(numRows), () => (Math.random() > 0.7 ? 1 : 0))
       );
     }
-    // if (type === pulsar) {
-    //   cols.push(Array.from(Array(numRows), () => 0));
-    //   console.log('cols before', cols);
+    if (type === pulsar) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.5);
+      const baseY = Math.floor(numRows * 0.5);
+      const newCoords = [];
+      pulsarCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      //   console.log(newCoords.length);
+      //   console.log(pulsarCoords.length);
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
 
-    //   //   const baseX = Math.floor(numCols * 0.55);
-    //   //   const baseY = Math.floor(numRows * 0.55);
-    //   //   pulsarCoords.forEach(([x, y]) => {
-    //   //     cols[baseX + x][baseY + y] = 1;
-    //   //     console.log(
-    //   //       `cols[${baseX + x}][${baseY + y}]${cols[baseX + x][baseY + y]}`
-    //   //     );
-    //   //     console.log('cols after', cols);
-    //   //   });
-    // }
+    if (type === hearts) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.5);
+      const baseY = Math.floor(numRows * 0.5);
+      const newCoords = [];
+      heartsCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      //   console.log(newCoords.length);
+      //   console.log(pulsarCoords.length);
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
   }
   genCount = 0;
   //   console.log(cols);
@@ -123,29 +95,6 @@ const Grid = () => {
   const [speed, setSpeed] = useState(400);
   const speedRef = useRef(speed);
   speedRef.current = speed;
-
-  const buildPulsar = useCallback(() => {
-    const baseX = Math.floor(numCols * 0.55);
-    const baseY = Math.floor(numRows * 0.55);
-    let temp = gen0;
-    for (let i = 0; i < numCols; i++) {
-      for (let j = 0; j < numRows; j++) {
-        pulsarCoords.forEach(([x, y]) => {
-          //   temp[0][0] = 1;
-          temp[baseX + x][baseY + y] = 1;
-          //   console.log(
-          //     `temp[${baseX + x}][${baseY + y}]${temp[baseX + x][baseY + y]}`
-          //   );
-        });
-        // console.log('temp', temp);
-        // setGen0(clone(temp));
-        setGen0(clone(temp));
-        // console.log('gen0', gen0);
-        // console.log(`${temp == gen0 ? 'yes' : 'no'}`);
-      }
-    }
-    return gen0;
-  }, []);
 
   const slower = curr_speed => {
     if (curr_speed < 100) {
@@ -249,8 +198,8 @@ const Grid = () => {
         >
           Random
         </button>
-        <button onClick={() => setGen0(buildPulsar())}>Pulsar</button>
-        {/* <button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</button> */}
+        <button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</button>
+        <button onClick={() => setGen0(starterArray(hearts))}>Hearts</button>
         <button
           onClick={() => {
             setGen0(starterArray(empty));
