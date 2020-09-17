@@ -4,6 +4,8 @@ import Rules from './Rules';
 import About from './About';
 import pulsarCoords from '../preset_cell_configs/pulsar';
 import heartsCoords from '../preset_cell_configs/hearts';
+import mothCoords from '../preset_cell_configs/moth';
+import sixXtwoCoords from '../preset_cell_configs/sixXtwo';
 
 const numCols = 50;
 const numRows = 50;
@@ -12,6 +14,8 @@ const empty = 'empty';
 const random = 'random';
 const pulsar = 'pulsar';
 const hearts = 'hearts';
+const moth = 'moth';
+const sixXtwo = 'sixXtwo';
 
 // list of neighbor positions
 // [x, y] => [col, row]
@@ -40,8 +44,8 @@ const starterArray = type => {
     }
     if (type === pulsar) {
       cols.push(Array.from(Array(numRows), () => 0));
-      const baseX = Math.floor(numCols * 0.5);
-      const baseY = Math.floor(numRows * 0.5);
+      const baseX = Math.floor(numCols * 0.47);
+      const baseY = Math.floor(numRows * 0.47);
       const newCoords = [];
       pulsarCoords.forEach(([x, y]) => {
         x = x + baseX;
@@ -67,8 +71,38 @@ const starterArray = type => {
         y = y + baseY;
         newCoords.push([x, y]);
       });
-      //   console.log(newCoords.length);
-      //   console.log(pulsarCoords.length);
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
+    if (type === moth) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.5);
+      const baseY = Math.floor(numRows * 0.5);
+      const newCoords = [];
+      mothCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
+    if (type === sixXtwo) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.4);
+      const baseY = Math.floor(numRows * 0.4);
+      const newCoords = [];
+      sixXtwoCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
       newCoords.forEach(([x, y]) => {
         if (i === x) {
           cols[i][y] = 1;
@@ -77,7 +111,6 @@ const starterArray = type => {
     }
   }
   genCount = 0;
-  //   console.log(cols);
   return cols;
 };
 
@@ -200,6 +233,8 @@ const Grid = () => {
         </button>
         <button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</button>
         <button onClick={() => setGen0(starterArray(hearts))}>Hearts</button>
+        <button onClick={() => setGen0(starterArray(moth))}>Moth</button>
+        <button onClick={() => setGen0(starterArray(sixXtwo))}>6 x 2</button>
         <button
           onClick={() => {
             setGen0(starterArray(empty));
