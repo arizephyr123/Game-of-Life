@@ -2,12 +2,20 @@ import React, { useState, useRef, createRef, useCallback } from 'react';
 import produce from 'immer';
 import Rules from './Rules';
 import About from './About';
+import pulsarCoords from '../preset_cell_configs/pulsar';
+import heartsCoords from '../preset_cell_configs/hearts';
+import mothCoords from '../preset_cell_configs/moth';
+import sixXtwoCoords from '../preset_cell_configs/sixXtwo';
 
 const numCols = 50;
 const numRows = 50;
 let genCount = 0;
 const empty = 'empty';
 const random = 'random';
+const pulsar = 'pulsar';
+const hearts = 'hearts';
+const moth = 'moth';
+const sixXtwo = 'sixXtwo';
 
 // list of neighbor positions
 // [x, y] => [col, row]
@@ -24,15 +32,82 @@ const locations = [
 
 // creates 2d array to fill grid
 const starterArray = type => {
-  const cols = [];
+  let cols = [];
   for (let i = 0; i < numCols; i++) {
-    if (type == empty) {
+    if (type === empty) {
       cols.push(Array.from(Array(numRows), () => 0));
     }
-    if (type == random) {
+    if (type === random) {
       cols.push(
         Array.from(Array(numRows), () => (Math.random() > 0.7 ? 1 : 0))
       );
+    }
+    if (type === pulsar) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.47);
+      const baseY = Math.floor(numRows * 0.47);
+      const newCoords = [];
+      pulsarCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      //   console.log(newCoords.length);
+      //   console.log(pulsarCoords.length);
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
+
+    if (type === hearts) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.5);
+      const baseY = Math.floor(numRows * 0.5);
+      const newCoords = [];
+      heartsCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
+    if (type === moth) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.5);
+      const baseY = Math.floor(numRows * 0.5);
+      const newCoords = [];
+      mothCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
+    }
+    if (type === sixXtwo) {
+      cols.push(Array.from(Array(numRows), () => 0));
+      const baseX = Math.floor(numCols * 0.4);
+      const baseY = Math.floor(numRows * 0.4);
+      const newCoords = [];
+      sixXtwoCoords.forEach(([x, y]) => {
+        x = x + baseX;
+        y = y + baseY;
+        newCoords.push([x, y]);
+      });
+      newCoords.forEach(([x, y]) => {
+        if (i === x) {
+          cols[i][y] = 1;
+        }
+      });
     }
   }
   genCount = 0;
@@ -54,16 +129,22 @@ const Grid = () => {
   const speedRef = useRef(speed);
   speedRef.current = speed;
 
-  const faster = curr_speed => {
-    if (curr_speed <= 1000) {
+  const slower = curr_speed => {
+    if (curr_speed < 100) {
+      setSpeed(curr_speed + 20);
+    }
+    if (curr_speed >= 100 && curr_speed <= 1000) {
       setSpeed(curr_speed + 100);
     } else {
       return;
     }
   };
 
-  const slower = curr_speed => {
-    if (curr_speed != 100) {
+  const faster = curr_speed => {
+    if (curr_speed > 21 && curr_speed <= 100) {
+      setSpeed(curr_speed - 20);
+    }
+    if (curr_speed > 101) {
       setSpeed(curr_speed - 100);
     } else {
       return;
@@ -81,7 +162,7 @@ const Grid = () => {
   };
 
   //    run Cycle rate is speed for setTimeout
-  const runCycle = useCallback(rate => {
+  const runCycle = useCallback(() => {
     setGen0(arr => {
       return produce(arr, arrCopy => {
         for (let i = 0; i < numCols; i++) {
@@ -114,7 +195,7 @@ const Grid = () => {
     if (!runningRef.current) {
       return;
     }
-    console.log('at Timeout');
+    // console.log('at Timeout speedRef.current', speedRef.current);
     return setTimeout(runCycle, speedRef.current);
   }, []);
 
@@ -129,16 +210,15 @@ const Grid = () => {
             if (running == false) {
               runningRef.current = true;
               //   runSim();
-              runCycle(speedRef.current);
+              runCycle();
             }
           }}
         >
-          {`running? -> ${running} ==== runningRef -> ${runningRef.current}`}
-          {/* {running ? 'Stop' : 'Start'} */}
+          {running ? 'Stop' : 'Start'}
         </button>
         <button
           onClick={() => {
-            runCycle(speedRef.current);
+            runCycle();
           }}
         >
           Next
@@ -151,6 +231,10 @@ const Grid = () => {
         >
           Random
         </button>
+        <button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</button>
+        <button onClick={() => setGen0(starterArray(hearts))}>Hearts</button>
+        <button onClick={() => setGen0(starterArray(moth))}>Moth</button>
+        <button onClick={() => setGen0(starterArray(sixXtwo))}>6 x 2</button>
         <button
           onClick={() => {
             setGen0(starterArray(empty));
@@ -161,8 +245,8 @@ const Grid = () => {
         </button>
         <div>
           <h5>Speed</h5>
-          <button onClick={() => faster(speed)}>-</button>
-          <button onClick={() => slower(speed)}>+</button>
+          <button onClick={() => slower(speedRef.current)}>-</button>
+          <button onClick={() => faster(speedRef.current)}>+</button>
         </div>
       </div>
       <Rules />
