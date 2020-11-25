@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
+import './less/index.less';
 import Grid from './components/Grid';
 
 function App() {
   return (
-    <div className='App'>
-      <h1>Conway's Game of Life</h1>
+    <div className='container'>
+      <h1 className='header-title'>Conway's Game of Life</h1>
       <Grid />
     </div>
   );
