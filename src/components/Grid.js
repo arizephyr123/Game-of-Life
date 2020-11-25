@@ -6,6 +6,7 @@ import pulsarCoords from '../preset_cell_configs/pulsar';
 import heartsCoords from '../preset_cell_configs/hearts';
 import mothCoords from '../preset_cell_configs/moth';
 import sixXtwoCoords from '../preset_cell_configs/sixXtwo';
+import '../less/index.less';
 
 const numCols = 50;
 const numRows = 50;
