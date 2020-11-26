@@ -6,7 +6,7 @@ import pulsarCoords from '../preset_cell_configs/pulsar';
 import heartsCoords from '../preset_cell_configs/hearts';
 import mothCoords from '../preset_cell_configs/moth';
 import sixXtwoCoords from '../preset_cell_configs/sixXtwo';
-import '../less/index.less';
+import '../styles/Grid.css';
 
 const numCols = 50;
 const numRows = 50;
@@ -201,10 +201,12 @@ const Grid = () => {
   }, []);
 
   return (
-    <div>
+    <div className='grid_container'>
       <div className='stats'>
         <h4>Generation: {genCount}</h4>
         <h4>{aliveCount()}</h4>
+      </div>
+      <div className='controls'>
         <button
           onClick={() => {
             setRunning(!running);
@@ -224,6 +226,17 @@ const Grid = () => {
         >
           Next
         </button>
+
+        <button
+          onClick={() => {
+            setGen0(starterArray(empty));
+            // console.log(`clear-> ${gen0}`);
+          }}
+        >
+          Clear
+        </button>
+      </div>
+      <div className='presets'>
         <button
           onClick={() => {
             setGen0(starterArray(random));
@@ -236,23 +249,19 @@ const Grid = () => {
         <button onClick={() => setGen0(starterArray(hearts))}>Hearts</button>
         <button onClick={() => setGen0(starterArray(moth))}>Moth</button>
         <button onClick={() => setGen0(starterArray(sixXtwo))}>6 x 2</button>
-        <button
-          onClick={() => {
-            setGen0(starterArray(empty));
-            // console.log(`clear-> ${gen0}`);
-          }}
-        >
-          Clear
-        </button>
-        <div>
-          <h5>Speed</h5>
-          <button onClick={() => slower(speedRef.current)}>-</button>
-          <button onClick={() => faster(speedRef.current)}>+</button>
-        </div>
       </div>
-      <Rules />
-      <About />
+
+      <div className='speed'>
+        <h5>Speed</h5>
+        <button onClick={() => slower(speedRef.current)}>-</button>
+        <button onClick={() => faster(speedRef.current)}>+</button>
+      </div>
+      <div className='info'>
+        <Rules />
+        <About />
+      </div>
       <div
+        className='grid'
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${numCols}, 10px)`
@@ -261,6 +270,7 @@ const Grid = () => {
         {gen0.map((cols, i) =>
           cols.map((rows, j) => (
             <div
+              className='cell'
               key={`${i}-${j}`}
               onClick={() => {
                 if (running) {
