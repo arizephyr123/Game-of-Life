@@ -1,6 +1,7 @@
 import React from 'react';
 import './less/index.less';
 import Grid from './components/Grid';
+import '../src/styles/App.css';
 
 function App() {
   return (
