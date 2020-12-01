@@ -1,26 +1,26 @@
-grid-container {
+.grid-container {
   background-color: red;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-stats {
+.stats {
   background-color: pink;
 }
 
-controls {
+.controls {
   background-color: blue;
 }
 
-presets {
+.presets {
   background-color: green;
 }
 
-speed {
+.speed {
   background-color: yellowgreen;
 }
 
-info {
+.info {
   background-color: yellow;
 }
