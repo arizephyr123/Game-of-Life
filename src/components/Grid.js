@@ -133,8 +133,10 @@ const Grid = () => {
   speedRef.current = speed;
 
   //   const [modalShow, setModalShow] = useState(false);
+  //   const [aboutModalShow, setAboutModalShow] = useState(false);
+  //   const aboutRef = createRef();
   const [aboutModalShow, setAboutModalShow] = useState(false);
-  const aboutRef = createRef();
+  const aboutModalShowRef = useRef(aboutModalShow);
 
   const slower = curr_speed => {
     if (curr_speed < 100) {
@@ -218,7 +220,6 @@ const Grid = () => {
             setRunning(!running);
             if (running == false) {
               runningRef.current = true;
-              //   runSim();
               runCycle();
             }
           }}
@@ -269,7 +270,7 @@ const Grid = () => {
 
         <MydModalWithGrid show={modalShow} onHide={() => setModalShow(false)} /> */}
 
-        {/* <Button
+        <Button
           variant='primary'
           onClick={() => {
             console.log('BEFORE', aboutModalShow);
@@ -281,12 +282,11 @@ const Grid = () => {
         </Button>
 
         <AboutModal
-          ref={aboutRef}
           show={aboutModalShow}
           onHide={() => setAboutModalShow(false)}
-        /> */}
-        <Rules />
-        <About />
+        />
+        {/* <Rules />
+        <About /> */}
       </div>
       <div
         className='grid'
