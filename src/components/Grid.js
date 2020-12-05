@@ -1,9 +1,8 @@
 import React, { useState, useRef, createRef, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import produce from 'immer';
-import Rules from './Rules';
-import About from './About';
 import AboutModal from './AboutModal';
+import RulesModal from './RulesModal';
 import pulsarCoords from '../preset_cell_configs/pulsar';
 import heartsCoords from '../preset_cell_configs/hearts';
 import mothCoords from '../preset_cell_configs/moth';
@@ -132,11 +131,8 @@ const Grid = () => {
   const speedRef = useRef(speed);
   speedRef.current = speed;
 
-  //   const [modalShow, setModalShow] = useState(false);
-  //   const [aboutModalShow, setAboutModalShow] = useState(false);
-  //   const aboutRef = createRef();
   const [aboutModalShow, setAboutModalShow] = useState(false);
-  const aboutModalShowRef = useRef(aboutModalShow);
+  const [rulesModalShow, setRulesModalShow] = useState(false);
 
   const slower = curr_speed => {
     if (curr_speed < 100) {
@@ -264,29 +260,36 @@ const Grid = () => {
         <button onClick={() => faster(speedRef.current)}>+</button>
       </div>
       <div className='info'>
-        {/* <Button variant='primary' onClick={() => setModalShow(true)}>
-          Launch modal with grid
-        </Button>
+        <div className='about'>
+          <Button
+            variant='primary'
+            onClick={() => {
+              setAboutModalShow(true);
+            }}
+          >
+            About
+          </Button>
 
-        <MydModalWithGrid show={modalShow} onHide={() => setModalShow(false)} /> */}
+          <AboutModal
+            show={aboutModalShow}
+            onHide={() => setAboutModalShow(false)}
+          />
+        </div>
+        <div className='rules'>
+          <Button
+            variant='primary'
+            onClick={() => {
+              setRulesModalShow(true);
+            }}
+          >
+            Rules
+          </Button>
 
-        <Button
-          variant='primary'
-          onClick={() => {
-            console.log('BEFORE', aboutModalShow);
-            setAboutModalShow(true);
-            console.log('AFTER', aboutModalShow);
-          }}
-        >
-          Launch ABOUT modal with grid
-        </Button>
-
-        <AboutModal
-          show={aboutModalShow}
-          onHide={() => setAboutModalShow(false)}
-        />
-        {/* <Rules />
-        <About /> */}
+          <RulesModal
+            show={rulesModalShow}
+            onHide={() => setRulesModalShow(false)}
+          />
+        </div>
       </div>
       <div
         className='grid'
