@@ -1,5 +1,6 @@
-.grid-container {
+.grids {
   background-color: red;
+  border: solid, 4px, purple;
   display: flex;
   justify-content: center;
   align-items: center;

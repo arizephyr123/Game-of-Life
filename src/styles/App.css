@@ -1,9 +1,9 @@
 .container {
   text-align: center;
-  /* background-color: blueviolet; */
-  align-content: center;
+  background-color: rgb(145, 117, 5);
+  /* align-content: center; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  align-items: flex-start;
 }
