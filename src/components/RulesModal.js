@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Modal, Row, Col, Container } from 'react-bootstrap';
+import React from 'react';
+import { Button, Modal, Container } from 'react-bootstrap';
 
 const RulesModal = props => {
   //   const [visible, setVisible] = useState(false);
