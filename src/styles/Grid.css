@@ -1,11 +1,16 @@
-.grids {
+.grid-container {
   background-color: red;
-  border: solid, 4px, purple;
+  padding: 3rem;
+  border: 15px solid purple;
   display: flex;
+  flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
 }
 
+.non-grid {
+  padding: 1.5rem;
+}
 .stats {
   background-color: pink;
 }

@@ -1,5 +1,5 @@
-import React, { useState, useRef, createRef, useCallback } from 'react';
-import { Button } from 'react-bootstrap';
+import React, { useState, useRef, useCallback } from 'react';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import produce from 'immer';
 import AboutModal from './AboutModal';
 import RulesModal from './RulesModal';
@@ -54,8 +54,6 @@ const starterArray = type => {
         y = y + baseY;
         newCoords.push([x, y]);
       });
-      //   console.log(newCoords.length);
-      //   console.log(pulsarCoords.length);
       newCoords.forEach(([x, y]) => {
         if (i === x) {
           cols[i][y] = 1;
@@ -205,90 +203,95 @@ const Grid = () => {
   }, []);
 
   return (
-    <div className='grid_container'>
-      <div className='stats'>
-        <h4>Generation: {genCount}</h4>
-        <h4>{aliveCount()}</h4>
-      </div>
-      <div className='controls'>
-        <button
-          onClick={() => {
-            setRunning(!running);
-            if (running == false) {
-              runningRef.current = true;
-              runCycle();
-            }
-          }}
-        >
-          {running ? 'Stop' : 'Start'}
-        </button>
-        <button
-          onClick={() => {
-            runCycle();
-          }}
-        >
-          Next
-        </button>
-
-        <button
-          onClick={() => {
-            setGen0(starterArray(empty));
-            // console.log(`clear-> ${gen0}`);
-          }}
-        >
-          Clear
-        </button>
-      </div>
-      <div className='presets'>
-        <button
-          onClick={() => {
-            setGen0(starterArray(random));
-            // console.log(`random-> ${gen0}`);
-          }}
-        >
-          Random
-        </button>
-        <button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</button>
-        <button onClick={() => setGen0(starterArray(hearts))}>Hearts</button>
-        <button onClick={() => setGen0(starterArray(moth))}>Moth</button>
-        <button onClick={() => setGen0(starterArray(sixXtwo))}>6 x 2</button>
-      </div>
-
-      <div className='speed'>
-        <h5>Speed</h5>
-        <button onClick={() => slower(speedRef.current)}>-</button>
-        <button onClick={() => faster(speedRef.current)}>+</button>
-      </div>
-      <div className='info'>
-        <div className='about'>
-          <Button
-            variant='primary'
-            onClick={() => {
-              setAboutModalShow(true);
-            }}
-          >
-            About
-          </Button>
-
-          <AboutModal
-            show={aboutModalShow}
-            onHide={() => setAboutModalShow(false)}
-          />
+    <div className='grid-container'>
+      <div className='non-grid'>
+        <div className='stats'>
+          <h5>Generation: {genCount}</h5>
+          <h5>{aliveCount()}</h5>
         </div>
-        <div className='rules'>
+        <div className='controls'>
+          <ButtonGroup className='controls-btn-group'>
+            <Button
+              onClick={() => {
+                setRunning(!running);
+                if (running == false) {
+                  runningRef.current = true;
+                  runCycle();
+                }
+              }}
+            >
+              {running ? 'Stop' : 'Start'}
+            </Button>
+            <Button
+              onClick={() => {
+                runCycle();
+              }}
+            >
+              Next
+            </Button>
+
+            <Button
+              onClick={() => {
+                setGen0(starterArray(empty));
+              }}
+            >
+              Clear
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        <div className='speed'>
+          <h5>Speed</h5>
+          <Button onClick={() => slower(speedRef.current)}>-</Button>
+          <Button onClick={() => faster(speedRef.current)}>+</Button>
+        </div>
+
+        <div className='presets'>
           <Button
-            variant='primary'
             onClick={() => {
-              setRulesModalShow(true);
+              setGen0(starterArray(random));
+              // console.log(`random-> ${gen0}`);
             }}
           >
-            Rules
+            Random
           </Button>
+          <Button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</Button>
+          <Button onClick={() => setGen0(starterArray(hearts))}>Hearts</Button>
+          <Button onClick={() => setGen0(starterArray(moth))}>Moth</Button>
+          <Button onClick={() => setGen0(starterArray(sixXtwo))}>6 x 2</Button>
+        </div>
 
-          <RulesModal
-            show={rulesModalShow}
-            onHide={() => setRulesModalShow(false)}
-          />
+        <div className='info'>
+          <div className='about'>
+            <Button
+              variant='primary'
+              onClick={() => {
+                setAboutModalShow(true);
+              }}
+            >
+              About
+            </Button>
+
+            <AboutModal
+              show={aboutModalShow}
+              onHide={() => setAboutModalShow(false)}
+            />
+          </div>
+          <div className='rules'>
+            <Button
+              variant='primary'
+              onClick={() => {
+                setRulesModalShow(true);
+              }}
+            >
+              Rules
+            </Button>
+
+            <RulesModal
+              show={rulesModalShow}
+              onHide={() => setRulesModalShow(false)}
+            />
+          </div>
         </div>
       </div>
       <div
