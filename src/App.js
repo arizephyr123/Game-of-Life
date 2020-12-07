@@ -3,8 +3,8 @@ import Grid from './components/Grid';
 
 function App() {
   return (
-    <div className='container'>
-      <h1>Conway's Game of Life</h1>
+    <div className='app-container'>
+      <h1 className='title'>Conway's Game of Life</h1>
       <Grid />
     </div>
   );

@@ -81,7 +81,6 @@ time,
 mark,
 audio,
 video {
-  /* background-color: blueviolet; */
   margin: 0;
   padding: 0;
   border: 0;
@@ -127,6 +126,7 @@ table {
   border-spacing: 0;
 }
 body {
+  background-color: #a2d5f2;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -146,11 +146,23 @@ code {
   }
 } */
 
-.container {
-  background: aqua;
-  /* text-align: center; */
-  display: flex;
+.app-container {
+  background: #a2d5f2;
+  text-align: center;
+  /* display: flex; */
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: flex-start; */
+  /* align-items: center; */
+  font-family: 'Anton', sans-serif;
+  height: 100vh;
+  width: 100vw;
+}
+
+h1 {
+  margin: 10px;
+  /* border: solid pink 5px; */
+  padding: 25px;
+  width: 100%;
+  font-size: 3.5rem;
+  color: #07689f;
 }

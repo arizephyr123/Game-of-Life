@@ -203,41 +203,67 @@ const Grid = () => {
   }, []);
 
   return (
-    <div className='grid-container'>
+    <div className='container'>
+      <div
+        className='grid'
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${numCols}, 10px)`
+        }}
+      >
+        {gen0.map((cols, i) =>
+          cols.map((rows, j) => (
+            <div
+              className={gen0[i][j] ? 'cell alive' : 'cell'}
+              key={`${i}-${j}`}
+              onClick={() => {
+                if (running) {
+                  console.log('cannot click');
+                  return;
+                }
+                const newGrid = produce(gen0, gen1 => {
+                  gen1[i][j] = gen0[i][j] ? 0 : 1;
+                });
+                setGen0(newGrid);
+              }}
+            ></div>
+          ))
+        )}
+      </div>
       <div className='non-grid'>
         <div className='stats'>
-          <h5>Generation: {genCount}</h5>
+          <h5>Generations: {genCount}</h5>
           <h5>{aliveCount()}</h5>
         </div>
         <div className='controls'>
-          <ButtonGroup className='controls-btn-group'>
-            <Button
-              onClick={() => {
-                setRunning(!running);
-                if (running == false) {
-                  runningRef.current = true;
-                  runCycle();
-                }
-              }}
-            >
-              {running ? 'Stop' : 'Start'}
-            </Button>
-            <Button
-              onClick={() => {
+          <Button
+            onClick={() => {
+              setRunning(!running);
+              if (running == false) {
+                runningRef.current = true;
                 runCycle();
-              }}
-            >
-              Next
-            </Button>
+              }
+            }}
+          >
+            {running ? 'Stop' : 'Start'}
+          </Button>
+          <Button
+            disabled={running}
+            onClick={() => {
+              runCycle();
+            }}
+          >
+            Next
+          </Button>
 
-            <Button
-              onClick={() => {
-                setGen0(starterArray(empty));
-              }}
-            >
-              Clear
-            </Button>
-          </ButtonGroup>
+          <Button
+            disabled={running}
+            onClick={() => {
+              setGen0(starterArray(empty));
+            }}
+          >
+            Clear
+          </Button>
         </div>
 
         <div className='speed'>
@@ -293,38 +319,6 @@ const Grid = () => {
             />
           </div>
         </div>
-      </div>
-      <div
-        className='grid'
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${numCols}, 10px)`
-        }}
-      >
-        {gen0.map((cols, i) =>
-          cols.map((rows, j) => (
-            <div
-              className='cell'
-              key={`${i}-${j}`}
-              onClick={() => {
-                if (running) {
-                  console.log('cannot click');
-                  return;
-                }
-                const newGrid = produce(gen0, gen1 => {
-                  gen1[i][j] = gen0[i][j] ? 0 : 1;
-                });
-                setGen0(newGrid);
-              }}
-              style={{
-                width: 10,
-                height: 10,
-                backgroundColor: gen0[i][j] ? '#42BF0F' : '#890409',
-                border: 'solid 1px black'
-              }}
-            ></div>
-          ))
-        )}
       </div>
     </div>
   );
