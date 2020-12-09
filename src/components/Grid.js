@@ -213,31 +213,33 @@ const Grid = () => {
 
   return (
     <div className='container'>
-      <div
-        className='grid'
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${numCols}, 10px)`
-        }}
-      >
-        {gen0.map((cols, i) =>
-          cols.map((rows, j) => (
-            <div
-              className={gen0[i][j] ? 'cell alive' : 'cell'}
-              key={`${i}-${j}`}
-              onClick={() => {
-                if (running) {
-                  console.log('cannot click');
-                  return;
-                }
-                const newGrid = produce(gen0, gen1 => {
-                  gen1[i][j] = gen0[i][j] ? 0 : 1;
-                });
-                setGen0(newGrid);
-              }}
-            ></div>
-          ))
-        )}
+      <div className='grid-container'>
+        <div
+          className='grid'
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${numCols}, 15px)`
+          }}
+        >
+          {gen0.map((cols, i) =>
+            cols.map((rows, j) => (
+              <div
+                className={gen0[i][j] ? 'cell alive' : 'cell'}
+                key={`${i}-${j}`}
+                onClick={() => {
+                  if (running) {
+                    console.log('cannot click');
+                    return;
+                  }
+                  const newGrid = produce(gen0, gen1 => {
+                    gen1[i][j] = gen0[i][j] ? 0 : 1;
+                  });
+                  setGen0(newGrid);
+                }}
+              ></div>
+            ))
+          )}
+        </div>
       </div>
       <div className='non-grid'>
         <div className='stats'>
