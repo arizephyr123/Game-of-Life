@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import produce from 'immer';
 import AboutModal from './AboutModal';
 import RulesModal from './RulesModal';
@@ -161,7 +161,16 @@ const Grid = () => {
         count += gen0[i][j];
       }
     }
-    return `Alive: ${count}  Dead: ${numCols * numRows - count}`;
+    return (
+      <div className='counts'>
+        <div className='alive-count'>
+          <h5>{`Alive: ${count}`}</h5>
+        </div>
+        <div className='dead-count'>
+          <h5>{`Dead: ${numCols * numRows - count}`}</h5>
+        </div>
+      </div>
+    );
   };
 
   //    run Cycle rate is speed for setTimeout
@@ -232,7 +241,7 @@ const Grid = () => {
       </div>
       <div className='non-grid'>
         <div className='stats'>
-          <h5>Generations: {genCount}</h5>
+          <h4>Generations: {genCount}</h4>
           <h5>{aliveCount()}</h5>
         </div>
         <div className='controls'>
@@ -265,26 +274,45 @@ const Grid = () => {
             Clear
           </Button>
         </div>
-
-        <div className='speed'>
+        <div className='speed-box'>
           <h5>Speed</h5>
-          <Button onClick={() => slower(speedRef.current)}>-</Button>
-          <Button onClick={() => faster(speedRef.current)}>+</Button>
+          <div className='speed-btns'>
+            <Button
+              className='speed-btn'
+              onClick={() => slower(speedRef.current)}
+            >
+              -
+            </Button>
+            <Button
+              className='speed-btn'
+              onClick={() => faster(speedRef.current)}
+            >
+              +
+            </Button>
+          </div>
         </div>
-
         <div className='presets'>
-          <Button
-            onClick={() => {
-              setGen0(starterArray(random));
-              // console.log(`random-> ${gen0}`);
-            }}
-          >
-            Random
-          </Button>
-          <Button onClick={() => setGen0(starterArray(pulsar))}>Pulsar</Button>
-          <Button onClick={() => setGen0(starterArray(hearts))}>Hearts</Button>
-          <Button onClick={() => setGen0(starterArray(moth))}>Moth</Button>
-          <Button onClick={() => setGen0(starterArray(sixXtwo))}>6 x 2</Button>
+          <h5>Preset Patterns</h5>
+          <div className='preset-btns'>
+            <Button
+              onClick={() => {
+                setGen0(starterArray(random));
+                // console.log(`random-> ${gen0}`);
+              }}
+            >
+              Random
+            </Button>
+            <Button onClick={() => setGen0(starterArray(pulsar))}>
+              Pulsar
+            </Button>
+            <Button onClick={() => setGen0(starterArray(hearts))}>
+              Hearts
+            </Button>
+            <Button onClick={() => setGen0(starterArray(moth))}>Moth</Button>
+            <Button onClick={() => setGen0(starterArray(sixXtwo))}>
+              6 x 2
+            </Button>
+          </div>
         </div>
 
         <div className='info'>

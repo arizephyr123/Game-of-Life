@@ -1,35 +1,31 @@
 .container {
-  /* background-color: rgb(160, 95, 111); */
-  /* width: 100%; */
+  /* border: solid red 3px; */
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   width: 100vw;
-  font-size: 1.7rem;
   color: #07689f;
 }
 
 .grid {
-  /* border: 3px solid purple; */
-  /* display: flex; */
-  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+  width: 60vw;
 }
 
 .cell {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   background-color: #ffc93c;
-  border: solid 1px #00416d;
-  border-radius: 3px;
+  border: solid 1px #00416d56;
+  border-radius: 5px;
 }
 .alive {
   background-color: #40a8c4;
 }
 
 .non-grid {
-  /* border: 3px solid magenta; */
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -38,39 +34,113 @@
 }
 
 .stats {
-  /* background-color: pink; */
-  /* padding: 1.5rem; */
+  border: 3px solid #07689f;
+  border-radius: 13px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fcd675ad;
+  padding: 0.2rem;
+}
+
+h4 {
+  font-size: 1.7rem;
+  padding: 0.2rem;
+}
+
+h5 {
+  font-size: 1.4rem;
+  padding: 0.2rem;
 }
 
 .controls {
-  /* background-color: blue; */
   display: flex;
   justify-content: space-around;
-
-  /* padding: 1.5rem; */
+  padding: 0.7rem;
 }
 
-.speed {
-  /* background-color: yellowgreen; */
+.speed-btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.presets,
+.speed-box {
   display: flex;
   justify-content: space-around;
-  /* padding: 1.5rem; */
+  align-items: center;
+  padding: 0.9rem;
+  margin: 0.3rem;
+  background-color: #fcd675ad;
+  border: 3px solid #07689f;
+  border-radius: 13px;
 }
 
 .presets {
-  /* background-color: green; */
-  display: flex;
-  justify-content: space-around;
-  /* padding: 1.5rem; */
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0.5rem;
 }
 
+.preset-btns {
+  /* background-color: #07689f; */
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-evenly;
+  padding: 1.5rem;
+}
+
+.preset-btns .btn {
+  background-color: #4295ac2d;
+  margin: 0.3rem;
+}
+
+/* .info are About and Rules buttons
+
+display none while WIP
+*/
 .info {
-  /* background-color: yellow; */
   display: flex;
   justify-content: space-around;
-  /* padding: 1.5rem; */
+  padding: 1.5rem;
+  display: none;
 }
 
-button {
-  /* padding: 1.5rem; */
+.btn {
+  background-color: #fcd675ad;
+  color: #07689f;
+  border: 3px solid #07689f;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  width: 5rem;
+}
+
+.speed-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 42px;
+  margin: 0.4rem;
+  text-align: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  background-color: #4295ac2d;
+}
+
+.counts {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.alive-count,
+.dead-count {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 45%;
+  font-size: 1.4rem;
+}
+
+.alive-count {
+  padding-left: 1rem;
 }
