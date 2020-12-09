@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import produce from 'immer';
 import AboutModal from './AboutModal';
 import RulesModal from './RulesModal';

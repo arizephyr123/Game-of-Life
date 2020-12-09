@@ -1,10 +1,11 @@
 import React from 'react';
 import Grid from './components/Grid';
+import Header from './components/Header';
 
 function App() {
   return (
     <div className='app-container'>
-      <h1 className='title'>Conway's Game of Life</h1>
+      <Header />
       <Grid />
     </div>
   );
