@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <header>
       <div className='overlay'></div>
-      <video autoPlay loop muted>
+      <video autoPlay muted>
         <source src={GOLVid} type='video/mp4' />
       </video>
       <div className='header-container h-100'>

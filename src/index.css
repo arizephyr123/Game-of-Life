@@ -135,14 +135,20 @@ table {
   }
 } */
 
+html,
+body {
+  background-color: #a2d5f2;
+  margin: 0;
+  min-height: 100%;
+}
+
 .app-container {
-  /* border: solid rgb(255, 183, 0) 4px; */
   background-color: #a2d5f2;
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
+  /* justify-content: stretch; */
+  /* align-items: stretch; */
   font-family: 'Anton', sans-serif;
   height: 100%;
   width: 100%;

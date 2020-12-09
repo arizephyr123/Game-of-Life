@@ -7,16 +7,22 @@
   color: #07689f;
 }
 
-.grid {
+.grid-container {
+  /* border: 3px solid red; */
   display: flex;
-  justify-content: center;
-  padding: 1.5rem;
+  justify-content: flex-end;
+  padding: 0.7rem;
   width: 60vw;
 }
 
+.grid {
+  border: 5px solid #07689f;
+  border-radius: 8px;
+}
+
 .cell {
-  width: 11px;
-  height: 11px;
+  width: 15px;
+  height: 15px;
   background-color: #ffc93c;
   border: solid 1px #00416d56;
   border-radius: 5px;
@@ -85,11 +91,12 @@ h5 {
   /* background-color: #07689f; */
   display: flex;
   flex-flow: wrap;
-  justify-content: space-evenly;
+  justify-content: space-around;
   padding: 1.5rem;
 }
 
 .preset-btns .btn {
+  align-content: center;
   background-color: #4295ac2d;
   margin: 0.3rem;
 }
@@ -111,7 +118,7 @@ display none while WIP
   border: 3px solid #07689f;
   font-size: 1.2rem;
   border-radius: 8px;
-  width: 5rem;
+  width: 6rem;
 }
 
 .speed-btn {
@@ -136,11 +143,8 @@ display none while WIP
 .dead-count {
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   width: 45%;
   font-size: 1.4rem;
-}
-
-.alive-count {
-  padding-left: 1rem;
+  padding-left: 2rem;
 }
