@@ -70,7 +70,8 @@ h5 {
 }
 
 .presets,
-.speed-box {
+.speed-box,
+.boundries-box {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -121,7 +122,8 @@ display none while WIP
   width: 6rem;
 }
 
-.speed-btn {
+.speed-btn,
+.boundry-btn {
   display: flex;
   justify-content: center;
   align-items: center;

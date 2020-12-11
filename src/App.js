@@ -1,12 +1,12 @@
 import React from 'react';
-import Grid from './components/Grid';
+import Grid2 from './components/Grid2';
 import Header from './components/Header';
 
 function App() {
   return (
     <div className='app-container'>
       <Header />
-      <Grid />
+      <Grid2 />
     </div>
   );
 }
