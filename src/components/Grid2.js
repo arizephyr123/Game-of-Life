@@ -294,6 +294,7 @@ const Grid2 = () => {
               -
             </Button>
             <Button
+              diabled={speedRef.current >= 100}
               className='speed-btn'
               onClick={() => faster(speedRef.current)}
             >
@@ -305,44 +306,50 @@ const Grid2 = () => {
         <div className='boundries-box'>
           <h5>Grid Boundries</h5>
           <div className='boundry-btns'>
-            <ButtonGroup>
-              <Button
-                className='boundry-btn'
-                onClick={() => {
-                  setBoundries(wrap);
-                  if (boundries != wrap) {
-                    boundriesRef.current = wrap;
-                  }
-                  console.log('Wrap selected', boundriesRef.current);
-                }}
-              >
-                Wrap
-              </Button>
-              <Button
-                className='boundry-btn'
-                onClick={() => {
-                  setBoundries(closed);
-                  if (boundries != closed) {
-                    boundriesRef.current = closed;
-                  }
-                  console.log('closed selected', boundriesRef.current);
-                }}
-              >
-                Closed
-              </Button>
-              <Button
-                className='boundry-btn'
-                onClick={() => {
-                  setBoundries(open);
-                  if (boundries != open) {
-                    boundriesRef.current = open;
-                  }
-                  console.log('open selected', boundriesRef.current);
-                }}
-              >
-                Open
-              </Button>
-            </ButtonGroup>
+            {/* <ButtonGroup> */}
+            <Button
+              className='boundry-btn'
+              block={true}
+              active={boundriesRef.current === wrap}
+              onClick={() => {
+                setBoundries(wrap);
+                if (boundries != wrap) {
+                  boundriesRef.current = wrap;
+                }
+                console.log('Wrap selected', boundriesRef.current);
+              }}
+            >
+              Wrap
+            </Button>
+            <Button
+              block={true}
+              active={boundriesRef.current === closed}
+              className='boundry-btn'
+              onClick={() => {
+                setBoundries(closed);
+                if (boundries != closed) {
+                  boundriesRef.current = closed;
+                }
+                console.log('closed selected', boundriesRef.current);
+              }}
+            >
+              Closed
+            </Button>
+            <Button
+              block={false}
+              active={boundriesRef.current === open}
+              className='boundry-btn'
+              onClick={() => {
+                setBoundries(open);
+                if (boundries != open) {
+                  boundriesRef.current = open;
+                }
+                console.log('open selected', boundriesRef.current);
+              }}
+            >
+              Open
+            </Button>
+            {/* </ButtonGroup> */}
           </div>
         </div>
 
@@ -352,7 +359,6 @@ const Grid2 = () => {
             <Button
               onClick={() => {
                 setGen0(starterArray(random));
-                // console.log(`random-> ${gen0}`);
               }}
             >
               Random

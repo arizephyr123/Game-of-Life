@@ -64,11 +64,6 @@ h5 {
   padding: 0.7rem;
 }
 
-.speed-btns {
-  display: flex;
-  justify-content: space-between;
-}
-
 .presets,
 .speed-box,
 .boundries-box {
@@ -85,7 +80,6 @@ h5 {
 .presets {
   flex-direction: column;
   justify-content: flex-start;
-  padding: 0.5rem;
 }
 
 .preset-btns {
@@ -113,13 +107,17 @@ display none while WIP
   display: none;
 }
 
-.btn {
+.btn,
+.btn:focus,
+.btn:active {
   background-color: #fcd675ad;
   color: #07689f;
   border: 3px solid #07689f;
   font-size: 1.2rem;
   border-radius: 8px;
   width: 6rem;
+  outline: none !important;
+  box-shadow: none;
 }
 
 .speed-btn,
@@ -127,12 +125,29 @@ display none while WIP
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 42px;
   margin: 0.4rem;
   text-align: center;
   height: 2.5rem;
-  width: 2.5rem;
   background-color: #4295ac2d;
+}
+
+.speed-btns {
+  display: flex;
+  justify-content: space-between;
+  font-size: 42px;
+}
+
+.speed-btn,
+.speed-btn .btn:focus,
+.speed-btn .btn:active {
+  font-size: 42px;
+  width: 2.5rem;
+}
+
+.btn:disabled {
+  background-color: #7295aa !important;
+  border: 3px solid #07689f;
+  border-radius: 8px;
 }
 
 .counts {
