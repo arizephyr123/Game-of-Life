@@ -190,12 +190,33 @@ const Grid2 = () => {
             let neighbors = 0;
             // console.log(`BEFORE (${i},${j}) neighbors -> ${neighbors}`);
             locations.forEach(([x, y]) => {
-              const neighborI = (i + x + numCols) % numCols;
-              const neighborJ = (j + y + numRows) % numRows;
-              //   console.log(
-              //     `(${neighborI},${neighborJ})-> ${arr[neighborI][neighborJ]}`
-              //   );
-              neighbors += arr[neighborI][neighborJ];
+              let neighborI = i + x;
+              let neighborJ = j + y;
+              //   console.log(boundriesRef.current);
+              if (boundriesRef.current === wrap) {
+                neighborI = (i + x + numCols) % numCols;
+                neighborJ = (j + y + numRows) % numRows;
+                //   console.log(
+                //     `(${neighborI},${neighborJ})-> ${arr[neighborI][neighborJ]}`
+                //   );
+              }
+              if (boundriesRef.current === closed) {
+                try {
+                  neighbors += arr[neighborI][neighborJ];
+                } catch (error) {
+                  neighbors += 0;
+                }
+              }
+              //   else if (boundriesRef.current === open) {
+              //     try {
+              //       neighbors += arr[neighborI][neighborJ];
+              //     } catch (error) {
+              //       neighbors += 1;
+              //     }
+              //   }
+              else {
+                neighbors += arr[neighborI][neighborJ];
+              }
               // If an organisim has 2 or 3 neighbors, then it remains alive in the next generation. Else it dies.
               if (arr[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
                 arrCopy[i][j] = 0;
@@ -223,7 +244,7 @@ const Grid2 = () => {
     <div className='container'>
       <div className='grid-container'>
         <div
-          className='grid'
+          className={boundriesRef.current === closed ? 'closed' : null}
           style={{
             display: 'grid',
             gridTemplateColumns: `repeat(${numCols}, 15px)`
@@ -288,13 +309,14 @@ const Grid2 = () => {
           <h5>Speed</h5>
           <div className='speed-btns'>
             <Button
+              disabled={speedRef.current >= 1101}
               className='speed-btn'
               onClick={() => slower(speedRef.current)}
             >
               -
             </Button>
             <Button
-              diabled={speedRef.current >= 100}
+              disabled={speedRef.current <= 41}
               className='speed-btn'
               onClick={() => faster(speedRef.current)}
             >
@@ -306,7 +328,6 @@ const Grid2 = () => {
         <div className='boundries-box'>
           <h5>Grid Boundries</h5>
           <div className='boundry-btns'>
-            {/* <ButtonGroup> */}
             <Button
               className='boundry-btn'
               block={true}
@@ -335,7 +356,7 @@ const Grid2 = () => {
             >
               Closed
             </Button>
-            <Button
+            {/* <Button
               block={false}
               active={boundriesRef.current === open}
               className='boundry-btn'
@@ -348,8 +369,7 @@ const Grid2 = () => {
               }}
             >
               Open
-            </Button>
-            {/* </ButtonGroup> */}
+            </Button> */}
           </div>
         </div>
 

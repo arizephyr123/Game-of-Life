@@ -5,7 +5,7 @@ import '../styles/Modals.css';
 const AboutModal = props => {
   return (
     <Modal {...props} aria-labelledby='modal-title'>
-      {console.log(props)}
+      {/* {console.log(props)} */}
       <Modal.Header closeButton>
         <Modal.Title id='modal-title'>About Conway's Game of Life</Modal.Title>
       </Modal.Header>

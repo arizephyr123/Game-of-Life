@@ -9,7 +9,7 @@ const RulesModal = props => {
 
   return (
     <Modal {...props} aria-labelledby='contained-modal-title-vcenter'>
-      {console.log(props)}
+      {/* {console.log(props)} */}
       <Modal.Header closeButton>
         <Modal.Title id='contained-modal-title-vcenter'>The Rules:</Modal.Title>
       </Modal.Header>
