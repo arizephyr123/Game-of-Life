@@ -200,19 +200,21 @@ const Grid2 = () => {
                 //     `(${neighborI},${neighborJ})-> ${arr[neighborI][neighborJ]}`
                 //   );
               }
-              if (boundriesRef.current === open) {
+              if (boundriesRef.current === closed) {
                 try {
                   neighbors += arr[neighborI][neighborJ];
                 } catch (error) {
-                  neighbors += 1;
+                  neighbors += 0;
                 }
-              } else if (boundriesRef.current === open) {
-                try {
-                  neighbors += arr[neighborI][neighborJ];
-                } catch (error) {
-                  neighbors += 1;
-                }
-              } else {
+              }
+              //   else if (boundriesRef.current === open) {
+              //     try {
+              //       neighbors += arr[neighborI][neighborJ];
+              //     } catch (error) {
+              //       neighbors += 1;
+              //     }
+              //   }
+              else {
                 neighbors += arr[neighborI][neighborJ];
               }
               // If an organisim has 2 or 3 neighbors, then it remains alive in the next generation. Else it dies.
@@ -242,7 +244,7 @@ const Grid2 = () => {
     <div className='container'>
       <div className='grid-container'>
         <div
-          className='grid'
+          className={boundriesRef.current === closed ? 'closed' : null}
           style={{
             display: 'grid',
             gridTemplateColumns: `repeat(${numCols}, 15px)`
@@ -314,7 +316,7 @@ const Grid2 = () => {
               -
             </Button>
             <Button
-              disabled={speedRef.current <= 20}
+              disabled={speedRef.current <= 41}
               className='speed-btn'
               onClick={() => faster(speedRef.current)}
             >
@@ -354,7 +356,7 @@ const Grid2 = () => {
             >
               Closed
             </Button>
-            <Button
+            {/* <Button
               block={false}
               active={boundriesRef.current === open}
               className='boundry-btn'
@@ -367,7 +369,7 @@ const Grid2 = () => {
               }}
             >
               Open
-            </Button>
+            </Button> */}
           </div>
         </div>
 
