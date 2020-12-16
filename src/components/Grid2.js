@@ -342,7 +342,7 @@ const Grid2 = () => {
             >
               Wrap
             </Button>
-            {/* <Button
+            <Button
               block={true}
               active={boundriesRef.current === closed}
               className='boundry-btn'
@@ -355,8 +355,8 @@ const Grid2 = () => {
               }}
             >
               Closed
-            </Button> */}
-            <Button
+            </Button>
+            {/* <Button
               block={false}
               active={boundriesRef.current === open}
               className='boundry-btn'
@@ -369,7 +369,7 @@ const Grid2 = () => {
               }}
             >
               Open
-            </Button>
+            </Button> */}
           </div>
         </div>
 
