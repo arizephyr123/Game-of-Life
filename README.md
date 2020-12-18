@@ -4,5 +4,5 @@ An interactive reproduction of John Conway's Game of Life simulating Cellular Au
 
 Tech Stack: React, JavaScript, Immer, Reactstrap, Bootstrap
 
-Deployed at: https://mystifying-carson-6c4f11.netlify.app/
+Deployed at: https://another-game-of-life.netlify.app/
 
